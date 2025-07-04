@@ -8,7 +8,7 @@ scope = [
 ]
 
 # Крок 2: Підключаємо JSON-файл
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
 
 # Крок 3: Авторизуємось і відкриваємо таблицю
 client = gspread.authorize(creds)
