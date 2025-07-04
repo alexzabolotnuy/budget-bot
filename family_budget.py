@@ -224,6 +224,7 @@ async def manual_daily_report(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 # ============ MAIN ============
 def main():
+    print(TOKEN)
     application = ApplicationBuilder().token(TOKEN).build()
 
     async def post_init(app):
