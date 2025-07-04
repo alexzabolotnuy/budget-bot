@@ -28,6 +28,7 @@ scope = [
 ]
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 encoded_creds = os.getenv("GOOGLE_CREDENTIALS_BASE64")
+print("GOOGLE_CREDENTIALS_BASE64:", os.getenv("GOOGLE_CREDENTIALS_BASE64"))
 decoded_creds = base64.b64decode(encoded_creds).decode("utf-8")
 creds_dict = json.loads(decoded_creds)
 
