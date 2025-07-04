@@ -12,8 +12,8 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from collections import defaultdict
 
 # ============ CONFIG LOAD ============
-config = json.loads(os.getenv("BOT_CONFIG_JSON"))
-print("BOT_CONFIG_JSON:", os.getenv("BOT_CONFIG_JSON"))
+with open("config.json", "r", encoding="utf-8") as f:
+    config = json.load(f)
 
 TOKEN = config['telegram_token']
 ALLOWED_USERS = config.get('allowed_user_ids', [])
@@ -26,13 +26,7 @@ scope = [
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
 ]
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-encoded_creds = os.getenv("GOOGLE_CREDENTIALS_BASE64")
-print("GOOGLE_CREDENTIALS_BASE64:", os.getenv("GOOGLE_CREDENTIALS_BASE64"))
-decoded_creds = base64.b64decode(encoded_creds).decode("utf-8")
-creds_dict = json.loads(decoded_creds)
-
-creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(SPREADSHEET_ID).sheet1
 
