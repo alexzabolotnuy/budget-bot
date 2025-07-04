@@ -4,10 +4,25 @@ from telegram.ext import (ApplicationBuilder, CommandHandler, ContextTypes,
                           ConversationHandler, MessageHandler, filters)
 import datetime
 import gspread
+import os
 import json
 from oauth2client.service_account import ServiceAccountCredentials
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from collections import defaultdict
+
+# ----- credentials.json -----
+if not os.path.exists("credentials.json"):
+    credentials = os.environ.get("GOOGLE_CREDENTIALS_JSON")
+    if credentials:
+        with open("credentials.json", "w") as f:
+            f.write(credentials)
+
+# ----- config.json -----
+if not os.path.exists("config.json"):
+    config = os.environ.get("BOT_CONFIG_JSON")
+    if config:
+        with open("config.json", "w") as f:
+            f.write(config)
 
 # ============ CONFIG LOAD ============
 with open('config.json', 'r', encoding='utf-8') as f:
