@@ -25,8 +25,8 @@ scope = [
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
 ]
-creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
-creds = ServiceAccountCredentials.from_json_keyfile_dict(json.loads(creds_json), scope)
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(SPREADSHEET_ID).sheet1
 
