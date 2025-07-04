@@ -4,34 +4,18 @@ from telegram.ext import (ApplicationBuilder, CommandHandler, ContextTypes,
                           ConversationHandler, MessageHandler, filters)
 import datetime
 import gspread
-import os
 import json
+import os
 from oauth2client.service_account import ServiceAccountCredentials
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from collections import defaultdict
 
-# ----- credentials.json -----
-if not os.path.exists("credentials.json"):
-    credentials = os.environ.get("GOOGLE_CREDENTIALS_JSON")
-    if credentials:
-        with open("credentials.json", "w") as f:
-            f.write(credentials)
-
-# ----- config.json -----
-if not os.path.exists("config.json"):
-    config = os.environ.get("BOT_CONFIG_JSON")
-    if config:
-        with open("config.json", "w") as f:
-            f.write(config)
-
 # ============ CONFIG LOAD ============
-with open('config.json', 'r', encoding='utf-8') as f:
-    config = json.load(f)
+config = json.loads(os.getenv("BOT_CONFIG_JSON"))
 
 TOKEN = config['telegram_token']
-ALLOWED_USERS = config.get('allowed_users', [])
-SPREADSHEET_ID = '1y039e2_zew51s0kQFUijIiX6_bq29Jx4U-7upo1nTts'
-CREDENTIALS_FILE = 'credentials.json'
+ALLOWED_USERS = config.get('allowed_user_ids', [])
+SPREADSHEET_ID = config.get('sheet_name', '1y039e2_zew51s0kQFUijIiX6_bq29Jx4U-7upo1nTts')
 
 # ============ GOOGLE SHEETS INIT ============
 scope = [
@@ -40,7 +24,8 @@ scope = [
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
 ]
-creds = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, scope)
+creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
+creds = ServiceAccountCredentials.from_json_keyfile_dict(json.loads(creds_json), scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(SPREADSHEET_ID).sheet1
 
